@@ -1,6 +1,7 @@
-"""La figura del informe: aciertos, «no sé» y errores por modo, en la corrida base y en la corrida sin null.
+"""Genera la figura del informe, que muestra los aciertos, las respuestas «no sé» y los errores de cada modo, tanto
+en la corrida base como en la corrida sin la instrucción de responder null.
 
-    uv run graficar.py          # lee resultados_base.csv y resultados_sin_null.csv; escribe grafico.png
+    uv run graficar.py          # lee resultados_base.csv y resultados_sin_null.csv, y escribe grafico.png
 """
 from pathlib import Path
 
@@ -12,7 +13,7 @@ CORRIDAS = {"con null": "resultados_base.csv", "sin null": "resultados_sin_null.
 RESULTADOS = {"acierta": "#0ca30c", "no sabe": "#a3a29b", "se equivoca": "#d03b3b"}
 TINTA, TINTA_SUAVE, FONDO = "#0b0b0b", "#52514e", "#fcfcfb"
 
-# una fila por modo y corrida, con cuántas preguntas cayeron en cada resultado
+# se construye una fila por cada modo y corrida, con el número de preguntas en cada resultado
 filas = []
 for corrida, archivo in CORRIDAS.items():
     res = pd.read_csv(AQUI / archivo)
@@ -21,7 +22,7 @@ for corrida, archivo in CORRIDAS.items():
         filas.append({"barra": f"{'MCP del BCRP' if modo == 'mcp' else 'Solo memoria'} · {corrida}",
                       **{r: conteo.get(r, 0) for r in RESULTADOS}})
 orden = [f"{m} · {c}" for m in ["Solo memoria", "MCP del BCRP"] for c in CORRIDAS]
-tabla = pd.DataFrame(filas).set_index("barra").loc[orden[::-1]]   # barh dibuja de abajo arriba
+tabla = pd.DataFrame(filas).set_index("barra").loc[orden[::-1]]   # se invierte, ya que barh dibuja de abajo arriba
 print(tabla)
 
 fig, ax = plt.subplots(figsize=(8, 3.6), facecolor=FONDO)

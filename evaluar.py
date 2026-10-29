@@ -2,7 +2,7 @@
 
     uv run evaluar.py                                   # memoria y mcp, con Haiku
     uv run evaluar.py --modos memoria mcp web --modelo sonnet
-    uv run evaluar.py --sin-null --salida resultados_sin_null.csv   # experimento: sin la opción de responder null
+    uv run evaluar.py --sin-null --salida resultados_sin_null.csv   # experimento, sin la opción de responder null
 
 Cada pregunta se le hace a Claude Code en modo no interactivo (claude -p) y debe responder un JSON con el valor.
 Escribe resultados.csv y cuenta cuántas acierta, cuántas se equivoca y en cuántas reconoce que no sabe.
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     p.add_argument("--modelo", default="haiku")
     p.add_argument("--preguntas", default=str(AQUI / "preguntas.csv"))
     p.add_argument("--paralelo", type=int, default=4)
-    p.add_argument("--sin-null", action="store_true", help="experimento: quita la salida fácil de responder null")
+    p.add_argument("--sin-null", action="store_true", help="experimento en el que se elimina la opción de responder null")
     p.add_argument("--salida", default=str(AQUI / "resultados.csv"))
     a = p.parse_args()
     instruccion = INSTRUCCION.replace(SALIDA_FACIL, "") if a.sin_null else INSTRUCCION
